@@ -59,7 +59,13 @@ def load_nucleus_dataset(filename):
     propPath = dataRoot + filename + '.csv'
 
     # if os.path.isfile(propPath):
-    df = pd.read_csv(propPath, index_col=0)
+    df_raw = pd.read_csv(propPath, index_col=0)
+
+    if "_hr" in filename:
+        keep_indices = np.where((df_raw["Z"] <= 0.46))
+        df = df_raw.iloc[keep_indices].copy()
+    else:
+        df = df_raw
     # else:
     #     raise Exception(
     #         f"Selected dataset( {filename} ) dataset has no nucleus data. Have you run extract_nucleus_stats?")
@@ -397,6 +403,7 @@ def chart_3d(gene_name, fileName, plot_type):
 if __name__ == '__main__':
     # app.run_server(debug=True)
     # app.run_server(debug=True, server=app.server)
+    # noinspection PyPackageRequirements
     app.run_server(debug=True)#, port=8056)
     # set parameters
 
