@@ -87,6 +87,7 @@ def visualize_atlas(dataRoot):
     ########################
     # App
     app = dash.Dash(__name__)  # , external_stylesheets=external_stylesheets)
+    server = app.server
     # global init_toggle
     # init_toggle = True
 
@@ -387,9 +388,9 @@ def visualize_atlas(dataRoot):
         return f
 
     # app.run_server(debug=True, server=app.server)
-    app.run_server(debug=True, port=8055)
-    server = app.server
-    
+    app.run_server(debug=True)
+
+
 if __name__ == '__main__':
 
     # app.run_server(debug=True)
