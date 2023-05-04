@@ -392,7 +392,7 @@ def visualize_atlas(dataRoot):
 if __name__ == '__main__':
 
     app.run_server(debug=True)
-    
+    server = app.server
     # set parameters
     dataRoot = "/Users/nick/Dropbox (Cole Trapnell's Lab)/Nick/pecFin/HCR_Data/fin_atlas/"
 
