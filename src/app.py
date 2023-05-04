@@ -386,10 +386,13 @@ def visualize_atlas(dataRoot):
         f.update_layout(uirevision="Don't change")
         return f
 
-    app.run_server(debug=True, server=app.server)
+    # app.run_server(debug=True, server=app.server)
+
 
 if __name__ == '__main__':
 
+    app.run_server(debug=True)
+    
     # set parameters
     dataRoot = "/Users/nick/Dropbox (Cole Trapnell's Lab)/Nick/pecFin/HCR_Data/fin_atlas/"
 
