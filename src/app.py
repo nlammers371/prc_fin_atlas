@@ -386,7 +386,7 @@ def visualize_atlas(dataRoot):
         f.update_layout(uirevision="Don't change")
         return f
 
-    app.run_server(debug=True, port=8052)
+    app.run_server(debug=True, server=app.server)
 
 if __name__ == '__main__':
 
