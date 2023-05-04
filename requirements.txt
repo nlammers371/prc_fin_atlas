@@ -16,6 +16,7 @@ click-log==0.4.0
 cloudpickle==2.2.0
 dash==2.9.3
 dash-core-components==2.0.0
+dash-daq==0.5.0
 dash-html-components==2.0.0
 dash-table==5.0.0
 dask==2023.2.0
