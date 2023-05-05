@@ -122,7 +122,7 @@ def create_figure(df, gene_name=None, plot_type=None):
 
     xyz_array = np.asarray(df[[xs, ys, zs]])
 
-    if (plot_type == "3D Scatter"):
+    if (plot_type == None) | (plot_type == "3D Scatter"):
         high_flags = df[plot_gene] >= 0.3
         low_flags = df[plot_gene] < 0.3
         fig = px.scatter_3d(df.iloc[np.where(high_flags)], x=xs, y=ys, z=zs, opacity=0.8, color=plot_gene,
@@ -154,7 +154,7 @@ def create_figure(df, gene_name=None, plot_type=None):
         #                         opacity=0.1,
         #                         color='gray'))
 
-    elif (plot_type == None) | (plot_type == "Volume Plot"):
+    elif (plot_type == "Volume Plot"):
 
         # generate points to interpolate
         xx = np.linspace(min(df[xs]), max(df[xs]), num=30)
@@ -306,25 +306,26 @@ def create_figure(df, gene_name=None, plot_type=None):
 f = create_figure(df)
 
 app.layout = html.Div([
-    dcc.Graph(id='3d_scat', figure=f),
+    dcc.Graph(id='3d_scat', figure=f, style={'width': '90vh', 'height': '90vh', 'padding-left': '450px',
+                                             'justify': 'center'}),
 
     html.Div(id='df_list', hidden=True),
     html.Div([
         html.Label(['Dataset:'], style={'font-weight': 'bold', "text-align": "center"}),
         dcc.Dropdown(options=[
-                            {'label': 'Low-res atlass (250 cells)', 'value': imNameList[0]},
-                            {'label': 'High-res atlass (1000 cells)', 'value': imNameList[1]},
+                            {'label': 'Low-res atlas (250 cells)', 'value': imNameList[0]},
+                            {'label': 'High-res atlas (1000 cells)', 'value': imNameList[1]},
                         ],
                      value=imNameList[1], id='dataset-dropdown'),
     ],
-        style={'width': '30%', 'display': 'inline-block'}),
+        style={'width': '33%', 'display': 'inline-block'}),
     html.Div(id='dd-output-container', hidden=True),
 
     html.Div([
         html.Label(['Gene:'], style={'font-weight': 'bold', "text-align": "center"}),
         dcc.Dropdown(id='gene-dropdown'),
     ],
-        style={'width': '20%', 'display': 'inline-block'}),
+        style={'width': '33%', 'display': 'inline-block'}),
     html.Div(id='gene-output-container', hidden=True),
 
     # html.Div([
@@ -334,9 +335,9 @@ app.layout = html.Div([
     html.Div(id='plot_list', hidden=True),
     html.Div([
         html.Label(['Plot Type:'], style={'font-weight': 'bold', "text-align": "center"}),
-        dcc.Dropdown(plot_list, plot_list[1], id='plot-dropdown'),
+        dcc.Dropdown(plot_list, plot_list[0], id='plot-dropdown'),
     ],
-        style={'width': '20%', 'display': 'inline-block'}),
+        style={'width': '33%', 'display': 'inline-block'}),
     html.Div(id='plot-output-container', hidden=True),
     # html.Div(
     #     daq.ToggleSwitch(
