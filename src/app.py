@@ -98,7 +98,7 @@ df = load_nucleus_dataset(imNameList[0])
 # list_raw = [item for item in colnames if "_cell_mean_nn" in item]
 gene_names = ['Col11a2', 'Emilin3a', 'Fgf10a', 'Hand2', 'Myod1', 'Prdm1a', 'Robo3', 'Sox9a', 'Tbx5a']
 
-plot_list = ["3D Scatter", "Volume Plot", "Multiplot"]
+plot_list = ["3D Scatter", "Volume Plot"]
 
 
 def create_figure(df, gene_name=None, plot_type=None):
@@ -107,8 +107,8 @@ def create_figure(df, gene_name=None, plot_type=None):
     colormaps[3] = "matter"
 
     if gene_name == None:
-        plot_gene = gene_names[0]  # + "_mean_nn"
-        cmap = colormaps[0]
+        plot_gene = gene_names[2]  # + "_mean_nn"
+        cmap = colormaps[2]
     else:
         plot_gene = gene_name  # + "_mean_nn"
         g_index = gene_names.index(gene_name)
@@ -122,7 +122,7 @@ def create_figure(df, gene_name=None, plot_type=None):
 
     xyz_array = np.asarray(df[[xs, ys, zs]])
 
-    if (plot_type == None) | (plot_type == "3D Scatter"):
+    if (plot_type == "3D Scatter"):
         high_flags = df[plot_gene] >= 0.3
         low_flags = df[plot_gene] < 0.3
         fig = px.scatter_3d(df.iloc[np.where(high_flags)], x=xs, y=ys, z=zs, opacity=0.8, color=plot_gene,
@@ -154,7 +154,7 @@ def create_figure(df, gene_name=None, plot_type=None):
         #                         opacity=0.1,
         #                         color='gray'))
 
-    elif plot_type == "Volume Plot":
+    elif (plot_type == None) | (plot_type == "Volume Plot"):
 
         # generate points to interpolate
         xx = np.linspace(min(df[xs]), max(df[xs]), num=30)
@@ -297,6 +297,10 @@ def create_figure(df, gene_name=None, plot_type=None):
         fig = px.scatter_3d(df, x=xs, y=ys, z=zs, opacity=0.4)
         raise Warning("Plot type " + plot_type + " is not currently supported")
 
+    fig.update_layout(scene=dict(
+        xaxis_title='A-P',
+        yaxis_title='D-V',
+        zaxis_title='P-D'))
     return fig
 
 f = create_figure(df)
@@ -306,12 +310,18 @@ app.layout = html.Div([
 
     html.Div(id='df_list', hidden=True),
     html.Div([
-        dcc.Dropdown(imNameList, imNameList[0], id='dataset-dropdown'),
+        html.Label(['Dataset:'], style={'font-weight': 'bold', "text-align": "center"}),
+        dcc.Dropdown(options=[
+                            {'label': 'Low-res atlass (250 cells)', 'value': imNameList[0]},
+                            {'label': 'High-res atlass (1000 cells)', 'value': imNameList[1]},
+                        ],
+                     value=imNameList[1], id='dataset-dropdown'),
     ],
         style={'width': '30%', 'display': 'inline-block'}),
     html.Div(id='dd-output-container', hidden=True),
 
     html.Div([
+        html.Label(['Gene:'], style={'font-weight': 'bold', "text-align": "center"}),
         dcc.Dropdown(id='gene-dropdown'),
     ],
         style={'width': '20%', 'display': 'inline-block'}),
@@ -323,7 +333,8 @@ app.layout = html.Div([
     # ])
     html.Div(id='plot_list', hidden=True),
     html.Div([
-        dcc.Dropdown(plot_list, plot_list[0], id='plot-dropdown'),
+        html.Label(['Plot Type:'], style={'font-weight': 'bold', "text-align": "center"}),
+        dcc.Dropdown(plot_list, plot_list[1], id='plot-dropdown'),
     ],
         style={'width': '20%', 'display': 'inline-block'}),
     html.Div(id='plot-output-container', hidden=True),
@@ -356,7 +367,7 @@ app.layout = html.Div([
 )
 def update_date_dropdown(name):
     new_dict = [{'label': i, 'value': i} for i in gene_name_dict[name]]
-    return new_dict, new_dict[0]['value']
+    return new_dict, new_dict[2]['value']
 
 # @app.callback(
 #     Output('dd-output-container', 'children'),
@@ -404,7 +415,7 @@ if __name__ == '__main__':
     # app.run_server(debug=True)
     # app.run_server(debug=True, server=app.server)
     # noinspection PyPackageRequirements
-    app.run_server(debug=True)#, port=8056)
+    app.run_server(debug=True, port=8056)
     # set parameters
 
 
