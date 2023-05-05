@@ -128,7 +128,7 @@ def create_figure(df, gene_name=None, plot_type=None):
         fig = px.scatter_3d(df.iloc[np.where(high_flags)], x=xs, y=ys, z=zs, opacity=0.8, color=plot_gene,
                             color_continuous_scale=cmap, range_color=(0, 1))
 
-        fig.update_traces(marker=dict(size=9
+        fig.update_traces(marker=dict(size=10
                                       ))
 
         fig.add_trace(go.Scatter3d(x=df[xs].iloc[np.where(low_flags)],
@@ -154,7 +154,7 @@ def create_figure(df, gene_name=None, plot_type=None):
         #                         opacity=0.1,
         #                         color='gray'))
 
-    elif (plot_type == None) | (plot_type == "Volume Plot"):
+    elif (plot_type == "Volume Plot"):
 
         # generate points to interpolate
         xx = np.linspace(min(df[xs]), max(df[xs]), num=30)
@@ -265,7 +265,7 @@ def create_figure(df, gene_name=None, plot_type=None):
 
         fig = go.Figure(data=go.Mesh3d(x=xyz_long2[G1_indices, 0][0], y=xyz_long2[G1_indices, 1][0],
                                        z=xyz_long2[G1_indices, 2][0],
-                                       alphahull=9,
+                                       alphahull=4,
                                        opacity=0.2,
                                        color='blue',
                                        name=gene_names[0]))
@@ -335,7 +335,7 @@ app.layout = html.Div([
     html.Div(id='plot_list', hidden=True),
     html.Div([
         html.Label(['Plot Type:'], style={'font-weight': 'bold', "text-align": "center"}),
-        dcc.Dropdown(plot_list, plot_list[1], id='plot-dropdown'),
+        dcc.Dropdown(plot_list, plot_list[0], id='plot-dropdown'),
     ],
         style={'width': '33%', 'display': 'inline-block'}),
     html.Div(id='plot-output-container', hidden=True),
